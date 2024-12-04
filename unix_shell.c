@@ -67,7 +67,7 @@ int file_redirect(char **args) {
             printf("Can't open file\n");
             return 0;
         }
-        dup2(input_open, STDOUT_FILENO);
+        dup2(input_open, STDIN_FILENO);
         close(input_open);
         args[input_index] = NULL;
         args[input_index - 1] = NULL; // Xóa 2 phần tử cuối "< file"
@@ -97,7 +97,7 @@ int file_redirect(char **args) {
 int main(void)
 {
     char *args[MAX_LINE/2 + 1]; /* command line arguments */
-    char *last_command[30]; // lệnh cuối cùng;
+    char last_command[MAX_LINE]; // lệnh cuối cùng;
     int should_run = 1; /* flag to determine when to exit program */
     int not_first = 0;
     while (should_run) {
@@ -217,14 +217,14 @@ int main(void)
             if (ok == 0)
                 continue;
             execvp(args[0], args);
-            printf("execvp failed");
+            printf("execvp failed\n");
             exit(0);
         }
         else if (pid > 0) {
             wait(NULL);
         }
         else {
-            printf("error");
+            printf("error\n");
         }
     }
     return 0;
